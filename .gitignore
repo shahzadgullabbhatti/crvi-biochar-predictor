@@ -1,0 +1,14 @@
+node_modules/
+.env
+.env.*
+!.env.example
+*.log
+*.joblib
+*.pkl
+*.xlsx
+*.docx
+*.pdf
+__pycache__/
+test-results/
+playwright-report/
+.DS_Store

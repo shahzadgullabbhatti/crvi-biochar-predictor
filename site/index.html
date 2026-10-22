@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="A research-only, browser-local CatBoost tool for predicting Cr(VI) removal by biochar. Explore preparation and adsorption conditions with applicability-domain screening.">
+  <meta name="theme-color" content="#121c26">
+  <title>Cr(VI) Removal Predictor | Biochar Research</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./app.mjs"></script>
+</head>
+<body>
+  <a class="skip-link" href="#predictor">Skip to predictor</a>
+  <main class="workspace">
+    <header class="masthead">
+      <a class="brand" href="./" aria-label="Biochar research home"><span class="brand-mark" aria-hidden="true">C</span><span>BIOCHAR <span class="brand-light">/ RESEARCH TOOLS</span></span></a>
+      <span class="privacy"><span class="status-dot"></span>Runs on your device</span>
+    </header>
+    <section class="intro" aria-labelledby="page-title">
+      <div class="intro-copy">
+        <p class="eyebrow">MATERIALS IN. INSIGHT OUT.</p>
+        <h1 id="page-title">Cr(VI) removal<br><span>predictor.</span></h1>
+        <p class="intro-description">Explore how biochar preparation and adsorption conditions influence predicted chromium removal.</p>
+        <div class="model-summary"><span class="model-chip">Bayesian CatBoost</span><span>98 development records</span><span>11 input features</span></div>
+      </div>
+      <div class="material-art" aria-hidden="true"><img src="./charcoal.svg" alt="" width="480" height="340"><span class="material-caption">BIOCHAR / A CARBON-RICH ADSORBENT</span></div>
+    </section>
+
+    <section class="predictor-card" id="predictor" aria-labelledby="conditions-heading">
+      <div class="card-heading"><div><p class="eyebrow">01 / SET YOUR CONDITIONS</p><h2 id="conditions-heading">A closer look at your material.</h2></div><button id="reset" class="text-button" type="button">Reset inputs <span aria-hidden="true">↺</span></button></div>
+      <p id="load-status" class="loading-message" role="status">Loading the trained model…</p>
+      <button id="retry" class="text-button" type="button" hidden>Retry loading model</button>
+      <form id="prediction-form" novalidate>
+        <div class="input-sections">
+          <fieldset><legend><span>01</span>Biochar preparation</legend><div id="preparation-fields" class="fields"></div></fieldset>
+          <fieldset><legend><span>02</span>Adsorption conditions</legend><div id="adsorption-fields" class="fields"></div></fieldset>
+          <fieldset><legend><span>03</span>Material descriptors</legend><div id="material-fields" class="fields"></div><p class="field-note">Choose category names, not numeric codes. An adsorption-model category may be unknown before a new experiment.</p></fieldset>
+        </div>
+        <div id="form-errors" class="error-message" role="alert" hidden></div>
+        <div class="form-footer"><p>All 11 fields are required.<br><span>Inputs are processed locally and are not uploaded.</span></p><button id="predict" class="predict-button" type="submit" disabled>Predict removal <span aria-hidden="true">↗</span></button></div>
+      </form>
+    </section>
+
+    <section class="result-card" id="result-card" aria-labelledby="result-heading" aria-live="polite">
+      <div class="result-main"><p class="eyebrow">02 / MODEL PREDICTION</p><h2 id="result-heading">Predicted Cr(VI) removal</h2><p class="prediction-value"><span id="prediction-value">—</span><span class="percent">%</span></p><p id="prediction-status" class="result-description">Set your conditions, then run a prediction.</p></div>
+      <div class="result-detail"><p class="detail-label">APPLICABILITY DOMAIN</p><p id="domain-status" class="domain-status">Not evaluated</p><div class="domain-track" aria-hidden="true"><span class="domain-cutoff"></span><span id="domain-marker" class="domain-marker" hidden></span></div><div class="domain-labels"><span>Closer to development data</span><span>Further away</span></div><p id="domain-details" class="result-description">A centroid-distance check, not a confidence interval.</p><button id="download" class="download-button" type="button" disabled>Download result <span aria-hidden="true">↓</span></button></div>
+    </section>
+    <div id="prediction-warnings" class="prediction-warnings" hidden></div>
+    <aside class="research-note"><span class="note-symbol" aria-hidden="true">!</span><p><strong>Research screening, not a laboratory recipe.</strong> Dosage uses the workbook's stored mg L<sup>−1</sup> label; original experimental units remain unverified. Predictions are model estimates, not measured removal or independently validated performance.</p></aside>
+    <details class="model-notes"><summary>Model, validation &amp; limitations <span aria-hidden="true">+</span></summary><div class="model-notes-content"><div><h3>The model behind the prediction</h3><p>Bayesian-tuned CatBoost, refitted on 98 development records. Eleven raw inputs generate 20 descriptors, then 23 model columns. The browser uses the same feature engineering, fitted preprocessing, and 417 trees as the verified Python pipeline.</p></div><div><h3>Internal validation only</h3><p id="metric-description">Loading verified model metrics.</p><p>Tuning and evaluation reused the development data. These scores are not external test performance and do not establish transfer to new studies or materials.</p></div><div><h3>What domain screening means</h3><p>A standardized distance to the development-data centroid is compared with its 95th-percentile cutoff. A point inside that cutoff is not guaranteed accurate. Input-range warnings are reported separately; predictions are never clipped to 0–100%.</p></div></div></details>
+    <footer class="site-footer"><p>BIOCHAR RESEARCH <span>/</span> Cr(VI) screening tool</p><p>No analytics. No input uploads. No fabricated predictions.</p></footer>
+  </main>
+</body>
+</html>
