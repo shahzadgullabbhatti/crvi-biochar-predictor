@@ -32,6 +32,23 @@ test("form and result interactions in a DOM test environment", async t => {
     assert.equal($("prediction-value").textContent, "—");
     assert.equal($("download").disabled, true);
   });
+  await t.test("compact desktop field order matches the three-column reference", () => {
+    const keys = container => [...$(container).querySelectorAll("input,select")].map(control => control.id);
+    assert.deepEqual(keys("preparation-fields"), ["temperature", "residence", "dosage", "adsorptionModel"]);
+    assert.deepEqual(keys("adsorption-fields"), ["heating", "concentration", "time", "surface"]);
+    assert.deepEqual(keys("material-fields"), ["gas", "adsorptionTemperature", "ph"]);
+    assert.ok($("material-fields").parentElement.contains($("predict")));
+    assert.equal($("predict").form.id, "prediction-form");
+  });
+  await t.test("supporting details are collapsed while all controls remain available", () => {
+    assert.equal(document.querySelector(".model-notes").open, false);
+    assert.equal($("input-ranges").querySelectorAll("dt").length, 9);
+    for (const field of model.schema.filter(field => field.type === "number")) {
+      assert.ok($(field.key).title.includes("Observed:"));
+    }
+    const ids = [...document.querySelectorAll("[id]")].map(element => element.id);
+    assert.equal(new Set(ids).size, ids.length);
+  });
   await t.test("named categorical selectors and Unicode units", () => {
     assert.equal($("gas").tagName, "SELECT");
     assert.equal($("adsorptionModel").tagName, "SELECT");

@@ -4,13 +4,14 @@ const $ = id => document.getElementById(id);
 let model;
 let lastResult;
 const sections = {
-  temperature: "preparation", residence: "preparation", heating: "preparation", gas: "preparation",
-  concentration: "adsorption", adsorptionTemperature: "adsorption", time: "adsorption", ph: "adsorption",
-  dosage: "material", surface: "material", adsorptionModel: "material",
+  temperature: "preparation", residence: "preparation", dosage: "preparation", adsorptionModel: "preparation",
+  heating: "adsorption", concentration: "adsorption", time: "adsorption", surface: "adsorption",
+  gas: "material", adsorptionTemperature: "material", ph: "material",
 };
 
 function createFields() {
   for (const container of document.querySelectorAll(".fields")) container.replaceChildren();
+  $("input-ranges").replaceChildren();
   for (const field of model.schema) {
     const wrapper = document.createElement("div");
     wrapper.className = "field";
@@ -49,7 +50,13 @@ function createFields() {
       range.className = "field-range";
       range.textContent = `Observed: ${field.observed[0].toLocaleString()}–${field.observed[1].toLocaleString()}`;
       control.setAttribute("aria-describedby", range.id);
+      control.title = `${field.label}: ${range.textContent} ${field.unit}`;
       wrapper.append(range);
+      const term = document.createElement("dt");
+      const description = document.createElement("dd");
+      term.textContent = field.label;
+      description.textContent = `${field.observed[0]}–${field.observed[1]} ${field.unit}`;
+      $("input-ranges").append(term, description);
     }
     $(`${sections[field.key]}-fields`).append(wrapper);
   }
@@ -137,7 +144,7 @@ $("prediction-form").addEventListener("submit", event => {
     lastResult = { input, ...result };
     $("result-card").classList.remove("stale");
     $("prediction-value").textContent = result.prediction.toFixed(2);
-    $("prediction-status").textContent = "Bayesian-optimized CatBoost · model estimate, not a measurement.";
+    $("prediction-status").textContent = "CatBoost estimate, not a measurement.";
     $("domain-status").textContent = result.withinDomain ? "Inside heuristic cutoff" : "Outside heuristic cutoff";
     $("domain-status").style.color = result.withinDomain ? "var(--green)" : "var(--amber)";
     $("domain-details").textContent = `Distance ${result.distance.toFixed(2)} / cutoff ${result.cutoff.toFixed(2)} (95th percentile). Not a confidence interval.`;

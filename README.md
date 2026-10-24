@@ -2,6 +2,10 @@
 
 A responsive research tool for model-guided screening of chromium removal by biochar. The trained Bayesian CatBoost model runs in the browser, including the original fitted preprocessing. GitHub Pages can host the entire application; no Python server, paid inference service, API key, or package installation is needed by visitors.
 
+Live app: https://shahzadgullabbhatti.github.io/crvi-biochar-predictor/
+
+The compact desktop interface uses three columns and four aligned rows, with labels beside inputs and the Predict button in the final slot. Prediction, applicability-domain status, reset and download remain on the main screen. Input ranges and methodological details are available in a collapsed section and input tooltips. Short desktop viewports use tighter spacing; mobile devices retain a scrollable, readable layout instead of shrinking controls to fit.
+
 ## Run locally
 
 Requires Node.js 22 or later. Runtime hosting has no npm dependencies; the test suite uses jsdom as a development dependency.
